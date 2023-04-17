@@ -10,17 +10,24 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # - name: Test code
       #   run: npm test
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        run: |
+          docker build . -t tourist-website
+          docker run -dit -p 8000:8000 tourist-website
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          context: .
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
           push: true
-          tags: tourist-website:latest
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          tags: jaimejr551/tourist-website:latest
