@@ -2,16 +2,10 @@
 FROM node:14-alpine
 
 # Set the working directory to /app
-WORKDIR /tourist-website
-
-# Copy the package.json and package-lock.json files to the container
-# COPY package*.json ./
-
-# Install the dependencies
-# RUN npm install
+WORKDIR /app
 
 # Copy the rest of the application files to the container
-COPY /tourist-website /app
+COPY . .
 
 # Build the application
 RUN npm run build
@@ -19,8 +13,11 @@ RUN npm run build
 # Use nginx as the base image for serving the static files
 FROM nginx:alpine
 
+# Copy the nginx configuration file to the container
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy the built application files to the nginx web server directory
-COPY --from=0 /app/build /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 80 for nginx
 EXPOSE 80
