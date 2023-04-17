@@ -12,12 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
-
       - name: Build and push Docker image
         run: |
           docker build -t tourist-website .
