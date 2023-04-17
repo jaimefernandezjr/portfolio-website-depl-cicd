@@ -12,13 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Test code
-      #   run: npm test
+      - name: Lint Javascript code
+        run: | 
+          npm install eslint
+          npx eslint .
 
       - name: Build and push Docker image
         run: |
-          docker build . -t tourist-website
-          docker run -dit -p 8000:8000 tourist-website
+          docker build -t tourist-website .
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -30,4 +31,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: jaimejr551/tourist-website:latest
+          tags: jaimejr551/tourist-website
