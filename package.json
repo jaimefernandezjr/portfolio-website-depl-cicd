@@ -1,0 +1,19 @@
+{
+  "name": "cicd-dockerize-app",
+  "version": "1.0.0",
+  "description": "a workflow to dockerize an application and push it in dockerhub",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaimefernandezjr/cicd-dockerize-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaimefernandezjr/cicd-dockerize-app/issues"
+  },
+  "homepage": "https://github.com/jaimefernandezjr/cicd-dockerize-app#readme"
+}
