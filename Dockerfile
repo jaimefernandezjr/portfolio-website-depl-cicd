@@ -8,7 +8,7 @@ WORKDIR /tourist-website
 # COPY package*.json ./
 
 # Install the dependencies
-RUN npm install
+# RUN npm install
 
 # Copy the rest of the application files to the container
 COPY /tourist-website /app
