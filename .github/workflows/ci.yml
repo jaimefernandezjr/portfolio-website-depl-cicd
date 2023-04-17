@@ -12,10 +12,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Lint Javascript code
-        run: | 
-          npm install eslint
-          npx eslint .
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
 
       - name: Build and push Docker image
         run: |
