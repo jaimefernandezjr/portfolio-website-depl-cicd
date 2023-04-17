@@ -1,15 +1,21 @@
 {
   "name": "tourist-website",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "description": "My cool app",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "build": "npm run clean && npm run build-js && npm run build-css",
+    "clean": "rm -rf dist",
+    "build-js": "babel src --out-dir dist --copy-files --ignore *.test.js",
+    "build-css": "postcss src/styles/main.css -o dist/styles/main.css"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "postcss": "^8.3.5"
+  }
 }
