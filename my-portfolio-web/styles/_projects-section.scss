@@ -1,0 +1,33 @@
+#projects__section {
+    height: $sectionHeight;
+    #projects__container {
+        h1 {
+            padding: 60px 0 20px 500px;
+            color: $darkBlueColor;
+        }
+        ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 450px 450px 450px;
+            margin: 0 30px;
+            img {
+                width: 400px;
+                height: 400px;
+            box-shadow: 10px 10px 10px grey;
+                &:hover {
+                    width: 410px;
+                    height: 410px
+                }
+            }
+            #project__title {
+                margin: 0 140px;
+                font-size: 20px;
+                font-weight: 700;
+                padding-top: 20px;
+            }
+        }
+    }
+    
+
+
+}

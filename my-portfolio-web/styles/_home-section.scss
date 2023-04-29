@@ -1,0 +1,76 @@
+#home__section {
+    background: $darkBlueColor;
+    color: $emeraldFont;
+    height: $sectionHeight;
+    display: flex;
+    padding: 120px;
+    #home__container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        animation-name: animated__appear;
+        animation-timing-function: cubic-bezier(1, 1, 1, 1);
+        animation-duration: 3s;
+        position: relative;
+        .intro__text {
+            font-size: 30px;
+            color: $whiteFont;
+        }
+        .profession__text{
+            font-size: 30px;
+            color: $whiteFont;
+            span {
+                background-color: #ff8177;
+                background-image: linear-gradient(200deg, #ff0844 0%, #ffb199 100%);
+                -webkit-background-clip: text;
+                -moz-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                -moz-text-fill-color: transparent;
+            }
+        }
+        
+        .name__text {
+            font-size: 50px;
+            font-weight: 900;
+            background-image: linear-gradient(90deg, rgb(77, 165, 136) 0%, hsl(193, 69, 71) 100%);
+            -webkit-background-clip: text;
+            -moz-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -moz-text-fill-color: transparent;
+            -webkit-transform:scale(1,1.4); /* Safari and Chrome */
+            -moz-transform:scale(1,1.4); /* Firefox */
+        }
+        #contactme__btn {
+            @include flexCenter;
+            background: rgb(233, 25, 67);
+            color: $whiteFont;
+            width: 150px;
+            height: 30px;
+            text-decoration: none;
+            margin-top: 20px; 
+            border-radius: 4px;
+            &:hover {
+                background-color:rgb(255, 255, 255);
+                color:rgb(233, 25, 67);
+                border-color:rgb(233, 25, 67);
+                border-width: 1px;
+                border-style: solid;
+                border-radius: 4px;
+                transition: all 0.3s ease;
+            }
+        }
+    }
+}
+@keyframes animated__appear {
+    0% {
+        top: 100px;
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.1;
+    }
+    100% {
+        top: 0px;
+        opacity: 1;
+    }
+}

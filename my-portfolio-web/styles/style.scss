@@ -1,0 +1,36 @@
+@mixin flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+$whiteFont: rgb(216, 214, 214);
+$emeraldFont: #66FCF1;
+$darkBlueColor: linear-gradient(130deg, black 0%, rgb(1, 7, 20) 25%, rgb(17, 1, 17)50%, hsl(221, 78, 7) 75%, black 100%);
+$sectionHeight: 675px;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Kumbh Sans', sans-serif;
+    scroll-behavior: smooth;
+}
+body {
+    overflow-x: hidden;
+  }
+  
+  .overflow-x-hidden {
+  /*   overflow-x: hidden; */
+    border: 1px solid blue;
+  }
+  
+h1 {
+    font-size: 40px;
+}
+
+@import "./navbar";
+@import "./home-section";
+@import "./aboutme-section";
+@import "./skills-section";
+@import "./projects-section";
+@import "./contact-section";

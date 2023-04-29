@@ -1,0 +1,38 @@
+#skills__section {
+    background: $darkBlueColor;
+    height: $sectionHeight;
+    display: flex;
+    flex-direction: column;
+    h1 {
+        color: $emeraldFont;
+        display: flex;
+        justify-content: center;
+        padding: 70px 0 20px 0;
+        
+    }
+    p {
+        color: $whiteFont;
+        margin: 0 100px;
+        text-indent: 50px;
+        text-align: justify;
+    }
+    ul {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        list-style: none;
+        grid-template-columns:
+        150px 150px 150px 150px 150px 150px;
+        grid-row-gap: 40px;
+        margin-top: 100px;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        box-shadow: 5px 5px 10px black;
+        &:hover {
+            box-shadow: 5px 5px 10px grey;
+        }
+    }
+}
