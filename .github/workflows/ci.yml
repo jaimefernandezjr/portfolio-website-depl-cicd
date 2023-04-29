@@ -26,4 +26,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: jaimejr551/tourist-website
+          tags: jaimejr551/my-portfolio-website
