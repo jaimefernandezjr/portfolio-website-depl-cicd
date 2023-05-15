@@ -1,2 +1,10 @@
 # cicd-dockerize-app
-a workflow to dockerize an application and push it in dockerhub
+A workflow to dockerize an application and push it in dockerhub
+
+## What's happening in this project
+1. When a dev pushes his code to the repository, the workflow runs
+2. Github action workflow dockerizes the portfolio and pushes the image to the dockerhub
+3. Kubernetes orchestration manifest file can be accessed in https://github.com/jaimefernandezjr/deploy-portfolio-website-k8s 
+
+### Extras
+- Setup Github Secrets to store the password  
