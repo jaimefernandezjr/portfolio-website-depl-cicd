@@ -1,4 +1,3 @@
-# cicd-dockerize-app
 A workflow to dockerize an application and push it in dockerhub
 
 ## What's happening in this project
