@@ -1,0 +1,12 @@
+name: lint
+run-name: ${{ github.event.head_commit.message }}
+
+on:
+  push:
+    paths:
+      - Dockerfile
+
+jobs:
+  lint:
+    uses: reusable-templates/.github/workflows/lint-dockerfile.yaml@v1.3.3
+    secrets: inherit
