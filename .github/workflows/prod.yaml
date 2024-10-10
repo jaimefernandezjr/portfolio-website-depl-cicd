@@ -1,0 +1,13 @@
+name: deploy-prod
+run-name: ${{ github.event.workflow_run.head_commit.message }}
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  prod-run:
+    uses: reusable-templates/.github/workflows/deploy-github.yaml@v1.3.3
+  with:
+    file-path: 
