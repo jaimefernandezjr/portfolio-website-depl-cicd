@@ -1,0 +1,140 @@
+# This ArgoCD Application manifest is set up to deploy and manage a Helm Chart
+# for a production environment using Argo CD
+
+
+apiVersion: argoproj.io/v1alpha1 
+kind: Application #defines the resource as an Argo CD Application
+metadata:
+  name: configuration-management-prod # name of this application
+  namespace: argocd                           # deployed in the argocd namespace
+  finalizers: # includes a resources finalizer, ensuring resources are cleaned up if the application is deleted
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default #specifies the project in ArgoCD to which this application belongs 
+  destination: # defines the target K8s cluster and namespace for deployment
+    server: https://kubernetes.default.svc # Kubernetes API server for in-cluster applications
+    namespace: prod # target namespace for the resource
+  syncPolicy: 
+    automated:   # Auto-sync is enabled
+      prune: true  # True - removes any K8s resources that are no longer defined in the source
+      selfHeal: true # True - ensures the application matches the desired state in Git
+  source:
+    repoURL: https://github.com/company/helm-charts.git  # URL to the Git repository
+    path: configuration-management # Path to the chart within the repo
+    targetRevision: main 
+    helm:
+      parameters: # Allows overriding Helm chart values
+        - name: image.tag # Set to a specific tag 
+          value: 0.1-d784c03-hotfix  # custom values for the Helm chart deployment, set as YAML
+          forceString: true
+      values: |-
+        podAnnotations:  # Annotations related to Elasticsearch logging
+          co.elastic.logs/enabled: "true"  
+          co.elastic.logs/json.keys_under_root: "false"
+          co.elastic.logs/json.add_error_key: "true"
+        newrelic:
+          enabled: true
+        ingress:  #ingress configuration use nginx with annotations for SSL redirection, frame denial, and regex for URL rewrites
+          enabled: true
+          className: nginx
+          annotations:
+            ingress.kubernetes.io/ssl-redirect: "true"
+            ingress.kubernetes.io/ssl-temporary-redirect: "false"
+            nginx.ingress.kubernetes.io/use-regex: "true"
+            nginx.ingress.kubernetes.io/rewrite-target: /$2
+            ingress.kubernetes.io/frame-deny: "false"
+            ingress.kubernetes.io/redirect-permanent: "true"
+          hosts:  # DEFINE ROUTES FOR ACCESSING THE SERVICE AT la-ecom-gr.company.com WITH SPECIFIC PATHS AND PORTS
+            - host: la-ecom-gr.company.com
+              paths:
+                - path: /cfg(/|$)(.*)
+                  pathType: ImplementationSpecific
+                  port: 80
+                - path: /cfg/public/admin(/|$)(.*)
+                  pathType: ImplementationSpecific
+                  port: 8087
+        readiness:
+           command: true
+
+        projectJobs: 
+          setup-project-database: # A POST-INSTALLATION HOOK RUNNING A SETUP SCRIPT WITH RETRY AND TIMEOUT PARAMETERS
+            hook: post-install
+            hookWeight: -2
+            task: /var/www/admin/bin/helm_post_install.sh
+            activeDeadlineSeconds: 6000
+            backoffLimit: 2
+        cronjobs: 
+          translations-import: # A SCHEDULED JOB TO IMPORT TRANSLATIONS DAILY AT MIDNIGHT
+            schedule: "0 0 * * *"
+            task: /var/www/admin/bin/import_all_translations.sh
+        application:  # CONFIGURATION DETAILS FOR MULTIPLE URLS cfgPlatformApiUrl, cfgX15PlatformUrl) are provided.
+          cfgTest: Test
+          environmentName: prod/brazil-south
+          url: https://la-ecom-gr.company.com/cfg
+          cfgHost: la-ecom-gr.company.com
+          cfgPlatformApiUrl: https://la-ecom-gr.company.com/platform-api
+          cfgX15PlatformUrl: https://la-ecom-gr.company.com/x15-platform/graphql
+          cfgCmsMockUrl: https://la-ecom-gr.company.com/
+          cfgConfiguratorPath: /spc
+          urlAdminPrefix: /cfg/public/admin
+
+        fin:  # ADDITIONAL SERVICE-SPECIFIC SETTINGS: MULTIPLE CONFIGURATION FOR VARIOUS CAR BRANDS TO MANAGE PAYMENT INTEGRATIONS AND BOOKING APIS SPECIFIC TO EACH REGION AND BRAND
+          cfgIfspUsername: OM4Dgd8C2x
+
+        bmwPeru:
+          cfgVisanetApiBaseUri: https://apiprod.vnforapps.com
+          cfgCheckoutPaymentRedirectUrl: https://www.company.pe/bmw/checkout-lite
+          cfgPaymentCurrency: USD
+          cfgPaymentReservationFee: 1000
+          cfgVisanetApiUsername: sampleuser@email.pe
+          cfgVisanetMerchantId: "111111"
+          cfgVisanetVerifyPaymentUrl: https://la-ecom-gr.company.com/api/v1/payment/receive-token/pe/es-pe/latam/bmw-dis
+
+        bmwChile:
+          cfgWebpayApiBaseUri: https://webpay3g.transbank.cl
+          cfgTransbankApiKeyId: "12345213"
+          cfgPaymentReservationFee: 1000000
+          cfgPaymentCurrency: CLP
+          cfgPaymentVerifyUrl: https://la-ecom-gr.company.com/x15-platform/api/v1/payment/receive-token/cl/es-cl/latam/bmw-dis
+          cfgCheckoutLiteUrl: https://www.wbm.cl/bmw/checkout-lite
+          cfgBmwChileServiceBookingApiClientId: j484sjndfk4rhu84hs
+
+        subaruPE:
+          cfgVisanetApiBaseUri: https://apiprod.vnforapps.com
+          cfgCheckoutPaymentRedirectUrl: https://www.subaru.com.pe/checkout/reserve-online
+          cfgPaymentCurrency: USD
+          cfgPaymentReservationFee: 500
+          cfgVisanetApiUsername: sampleuser@company.com.pe
+          cfgVisanetMerchantId: "45678"
+          cfgVisanetVerifyPaymentUrl: https://la-ecom-gr.company.com/x15-platform/api/v1/payment/receive-token/pe/es-pe/latam/subaru
+
+        subaruChile:
+          cfgWebpayApiBaseUri: https://webpay3g.transbank.cl
+          cfgTransbankApiKeyId: "3453544563"
+          cfgPaymentCurrency: CLP
+          cfgPaymentVerifyUrl: https://la-ecom-gr.company.com/x15-platform/api/v1/payment/receive-token/cl/es-cl/latam/subaru
+          cfgCheckoutLiteUrl: https://www.wbm.cl/sub-dis/checkout-lite
+          cfgSubaChileServiceBookingApiClientId: iclE1FnsutVhgGK5mNt9qzaJNajqakkzNd69GoMAoGB2FhlQ
+
+        dfskChile:
+          cfgDfskChileServiceBookingApiClientId: iclE1FnsutVhgGK5mNt9qzaJNajqakkzNd69GoMAoGB2FhlQ
+
+        miniChile:
+          cfgMiniChileServiceBookingApiClientId: iclE1FnsutVhgGK5mNt9qzaJNajqakkzNd69GoMAoGB2FhlQ
+
+        motChile:
+          cfgMotoChileServiceBookingApiClientId: iclE1FnsutVhgGK5mNt9qzaJNajqakkzNd69GoMAoGB2FhlQ
+
+        azureAdB2c:
+          clientId: 7-9ea2-2dcbefa42a36-fa600520-7b4e-4af
+          metadataUrl: https://login.microsoftonline.com/-9150-1ad91c9469c6-038d1eb6-c4ba-4396/v2.0/.well-known/openid-configuration
+          redirectUri: https://la-ecom-gr.company.com/cfg/public/admin
+
+        amicarLatamChile:
+          clientId: Fa0EsNJfTEIm5LDxM0AdPFYNRbLxdVKxQXL0nhGgyH03lS4d
+          apiKey: Fa0EsNJfTEIm5LDxM0AdPFYNRbLxdVKxQXL0nhGgyH03lS4d
+
+        redis: # CONNECTION DETAILS FOR A REDIS CACHE HOSTED ON AZURE WITH SPECIFIED HOST, PORT, AND DB
+          host: az-brs-ddc-redis-prod-dxp-core-1.privatelink.redis.cache.windows.net
+          port: 1234
+          db: 3
