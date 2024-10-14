@@ -8,5 +8,5 @@ on:
 
 jobs:
   lint:
-    uses: portfolio-depl-reusable-workflows/.github/workflows/lint-dockerfile.yaml@v1.3.3
+    uses: jaimefernandezjr/portfolio-depl-reusable-workflows/.github/workflows/lint-dockerfile.yaml@v1.3.3
     secrets: inherit
