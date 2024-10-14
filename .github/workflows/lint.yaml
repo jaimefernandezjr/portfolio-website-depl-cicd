@@ -1,5 +1,5 @@
 name: lint
-run-name: ${{ github.event.head_commit.message }}
+# run-name: ${{ github.event.head_commit.message }}
 
 on:
   push:
@@ -8,5 +8,5 @@ on:
 
 jobs:
   lint:
-    uses: reusable-templates/.github/workflows/lint-dockerfile.yaml@v1.3.3
+    uses: portfolio-depl-reusable-workflows/.github/workflows/lint-dockerfile.yaml@v1.3.3
     secrets: inherit
